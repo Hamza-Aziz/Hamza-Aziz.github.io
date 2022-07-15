@@ -35,4 +35,7 @@ In progress :
 
 Free time :
  * Sport and meet friends!
- * Giving back to the community: https://stackoverflow.com/users/10735209/hamza-aziz
+ * Giving back to the community on stackoverflow
+  
+ 
+[![Hamza Aziz StackOverflow](https://github-readme-stackoverflow.vercel.app/?userID=10735209)](https://stackoverflow.com/users/10735209/hamza)

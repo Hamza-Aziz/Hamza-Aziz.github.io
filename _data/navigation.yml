@@ -6,8 +6,6 @@ main:
     url: /about/
   - title: "Portfolio"
     url: /portfolio/
-  - title: "posts"
-    url: /posts/
   - title: "Achievements"
     url: /achievements/
   - title: "Archive"
