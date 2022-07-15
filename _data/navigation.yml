@@ -1,0 +1,16 @@
+# main links
+main:
+  - title: "Home"
+    url: /index.html
+  - title: "About"
+    url: /about/
+  - title: "Portfolio"
+    url: /portfolio/
+  - title: "Resume"
+    url: /assets/docs/resume-hamza.pdf  
+  - title: "posts"
+    url: /posts/
+  - title: "Achievements"
+    url: /achievements/
+  - title: "Archive"
+    url: /year-archive/
