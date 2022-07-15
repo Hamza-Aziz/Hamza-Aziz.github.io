@@ -6,8 +6,6 @@ main:
     url: /about/
   - title: "Portfolio"
     url: /portfolio/
-  - title: "Resume"
-    url: /assets/docs/resume-hamza.pdf  
   - title: "posts"
     url: /posts/
   - title: "Achievements"
