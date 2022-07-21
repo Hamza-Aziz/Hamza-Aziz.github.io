@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.2">Jekyll</generator><link href="/feed.xml" rel="self" type="application/atom+xml" /><link href="/" rel="alternate" type="text/html" /><updated>2022-07-21T19:46:29+00:00</updated><id>/feed.xml</id><title type="html">Hamza aziz</title><subtitle>my daily tasks as a devops engineer</subtitle><author><name>Hamza aziz</name></author><entry><title type="html">All of my notes on one blog</title><link href="/my-notes/" rel="alternate" type="text/html" title="All of my notes on one blog" /><published>2022-07-13T18:49:42+00:00</published><updated>2022-07-13T18:49:42+00:00</updated><id>/my%20notes</id><content type="html" xml:base="/my-notes/"><![CDATA[<ul>
+  <li><a href="#where-does-the-browser-save-the-cache">where does the browser save the cache</a></li>
+  <li><a href="#what-are-inodes">what are inodes</a></li>
+  <li><a href="#hard-link-vs-softlink">hard link vs softlink</a></li>
+  <li><a href="#osi-model">OSI model</a></li>
+  <li><a href="#deployments-startegies">deployments startegies</a></li>
+  <li><a href="#cdn">CDN</a></li>
+  <li><a href="#what-is-a-container">what is a container</a></li>
+  <li><a href="#docker-image">docker image</a></li>
+  <li><a href="#namespaces-used-by-docker">namespaces used by docker</a></li>
+  <li><a href="#docker-network-driver-summary">docker Network driver summary</a></li>
+  <li><a href="#what-happens-when-you-type-in-browser-wwwamazoncom">what happens when you type in browser www.amazon.com</a></li>
+  <li><a href="#techniques-to-scale-a-relational-database">techniques to scale a relational database</a></li>
+  <li><a href="#how-nat-works">how nat works</a></li>
+  <li><a href="#what-is-a-service-how-can-i-check-the-logs-of-a-service-where-are-they-located-how-can-i-check-the-status-of-a-service-how-can-i-start-a-service">What is a service? How can I check the logs of a service? where are they located? How can I check the status of a service? How can I start a service?**</a></li>
+  <li><a href="#paging-and-swapping">Paging and swapping</a></li>
+  <li><a href="#what-do-you-do-if-a-customer-says-their-server-is-using-too-much-ram">what do you do if a customer says their server is using too much RAM**</a></li>
+  <li><a href="#suppose-that-im-a-client-and-i-cannot-connect-to-a-remote-server-using-ssh-how-do-you-troubleshoot-this-problem-">Suppose that i’m a client and i cannot connect to a remote server using ssh. How do you troubleshoot this problem ?**</a></li>
+  <li><a href="#slow-system-performance-reasons-and-troubleshooting-toolssteps">Slow system performance: reasons and troubleshooting tools/steps**</a></li>
+  <li><a href="#latency-vs-throughput">latency vs throughput</a></li>
+  <li><a href="#how-can-we-check-if-there-is-an-open-connection-to-a-remote-host">How can we check if there is an open connection to a remote host?</a></li>
+  <li><a href="#how-checj-if-a-port-is-openclosed-on-a-remote-server">how checj if a port is open/closed on a remote server</a></li>
+  <li><a href="#3-way-handshake">3-way handshake</a></li>
+  <li><a href="#how-does-tcp-terminate-a-session">How does TCP terminate a session</a></li>
+  <li><a href="#symmetric-and-asymmetric-encryption">symmetric and asymmetric encryption</a></li>
+  <li><a href="#lvm">LVM</a></li>
+</ul>
+
+<h3 id="where-does-the-browser-save-the-cache">where does the browser save the cache</h3>
+
+<p>in the os speceficly in the hidden cache directory located in the home directory</p>
+
+<p><strong><a href="#"><code class="language-plaintext highlighter-rouge">^        back to top        ^</code></a></strong></p>
+<h3 id="what-are-inodes">what are inodes</h3>
+
+<p>a data structure to store metadata about a file/directory</p>
+
+<p>Whenever a user or a program refers to a file by name, the operating system uses that name to look up the corresponding inode, which then enables the system to obtain the information it needs about the file to perform further operations. That is, a file name in a Unix-like operating system is merely an entry in a table with inode numbers, rather than being associated directly with a file (in contrast to other operating systems such as the Microsoft Windows systems). The inode numbers and their corresponding inodes are held in inode tables, which are stored in strategic locations in a filesystem, including near its beginning.</p>
+
+<p>more info : https://linuxgazette.net/105/pitcher.html
+http://www.linfo.org/inode.html</p>
+
+<p><strong><a href="#"><code class="language-plaintext highlighter-rouge">^        back to top        ^</code></a></strong></p>
+<h3 id="hard-link-vs-softlink">hard link vs softlink</h3>
+<p>hard link : two files are hardlinked, when both filename can reference the same inode number and thus the same content.<br />
+<img src="../assets/images/article_post/hardlink.png" alt="hardlink" /><br />
+<code class="language-plaintext highlighter-rouge">ln basic.file hardlink.file</code><br />
+soft link : the data part of this file carries a path to another file
+<img src="../assets/images/article_post/softlink.png" alt="softlink" /><br />
+<code class="language-plaintext highlighter-rouge">ln -s basic.file softlink.file</code></p>
+
+<p><strong><a href="#"><code class="language-plaintext highlighter-rouge">^        back to top        ^</code></a></strong></p>
+<h3 id="osi-model">OSI model</h3>
+
+<p><strong>The OSI Model</strong> is a stabdard that breaks down network communication into seven layers useful for identifying network issues.</p>
+
+<p>an issue can be narrowed down to one specific layer so a lot of unnecessary work can be avoided</p>
+
+<p><strong>Application layer</strong> : helps software applications like web browsers and email clients to initiate communications and it’s the only layer that interacts with data from the user. (HTTP, SMTP)</p>
+
+<p><strong>Presentation layer</strong> : responsible for preparing data so it can be readable by the application layer, this where the <strong>encryption</strong> of data is done before sending it to the session layer in case of encapsulation and where the descryption happens in case of decapsulation, <strong>translation</strong> from one encodying method to an other , <strong>compression</strong> to speed up the transmission.</p>
+
+<p><strong>Session layer</strong> : responsible for opening and closing communication between the two devices long enough to transfer all data requested,  synchronizes data transfer with checkpoints (no need to start transferring again from scratch if a problem occurs )</p>
+
+<p><strong>Transport layer</strong> : responsable for breaking the data recieved from the session layer into chunks called <strong>segments</strong> before sending it to layer 3 (encapsulation), reassembling the segments into data that the session layer can consume(decapsulation), <strong>flow controll</strong> and <strong>error control</strong>.<br />
+<ins>Flow control</ins> determines an optimal speed of transmission to ensure that a sender with a fast connection doesn’t overwhelm a receiver with a slow connection.<br />
+<ins>Error control</ins> ensures that the data received is complete, and requesting a retransmission if it isn’t by using checksum.</p>
+
+<p><strong>Network layer</strong> : responsible for facilitating data transfer between two <strong>different networks</strong>, breaks up <strong>segments</strong> from the transport layer into <strong>packets, routing</strong>.</p>
+
+<p><strong>Data link layer</strong> : facilitates data transfer between two devices on the <strong>SAME network</strong> , breaks packets to <strong>frames</strong>, <strong>flow controll</strong> and <strong>error contoll on the same network</strong>.</p>
+
+<p><strong>Physical layer</strong> : includes the physical equipment involved in the data transfer, breaks <strong>frames to bit stream (1s, 0s)</strong>.</p>
+
+<p><strong><a href="#"><code class="language-plaintext highlighter-rouge">^        back to top        ^</code></a></strong></p>
+<h3 id="deployments-startegies">deployments startegies</h3>
+
+<p><strong>In-Place Deployments</strong>
+the deployment is done when the application on each instance in the deployment group is stopped, the latest application revision is installed, and the new version of the application is started and validated. (can be done all at once, or as a rouling update).</p>
+
+<p><strong>Blue/Green Deployments</strong>
+technique for releasing applications by shift traffic between two identical environments running differing versions of the application.
+Blue/green deployments enable you to launch a new version (green) of your application alongside the old version (blue).
+<strong>rollback strategy</strong> : switch the router back to your blue environment.</p>
+
+<p><strong>Canary Deployments</strong>
+you start by deploying the new version of your software to a subset of your infrastructure, to which no users are routed, When you are happy with the new version, you can start routing a few selected users to it.
+As you gain more confidence in the new version, you can start releasing it to more servers in your infrastructure and routing more users to it.
+<strong>rollback strategy</strong> is simply to reroute users back to the old version until you have fixed the problem.</p>
+
+<p>more info : https://martinfowler.com/bliki/BlueGreenDeployment.html</p>
+
+<p><strong><a href="#"><code class="language-plaintext highlighter-rouge">^        back to top        ^</code></a></strong></p>
+<h3 id="cdn">CDN</h3>
+<p>a CDN is a network of servers linked together with the goal of delivering content as quickly, cheaply, reliably, and securely as possible. In order to improve speed and connectivity.</p>
+
+<p>more info : https://www.cloudflare.com/learning/cdn/what-is-a-cdn/</p>
+
+<p><strong><a href="#"><code class="language-plaintext highlighter-rouge">^        back to top        ^</code></a></strong></p>
+<h3 id="what-is-a-container">what is a container</h3>
+
+<p>The Open Container Initiative (OCI) develops specifications for standards on Operating System process and application containers
+The Docker engine is modular in design and based heavily on open-standards from the OCI.
+The Docker daemon implements the Docker API which is currently a rich, versioned, HTTP API that has developed alongside the rest of the Docker project.
+Container execution is handled by <strong>containerd</strong>. <strong>containerd</strong> was written by Docker, Inc. and contributed to the CNCF.</p>
+
+<p>You can think of it as a container supervisor that handles container lifecycle operations.
+It is small and lightweight and can be used by other projects and third-party tools.
+For example, it’s becoming the most common container runtime in Kubernetes.
+<strong>containerd</strong> needs to talk to an <strong>OCI-compliant container runtime</strong> to actually create containers.</p>
+
+<p>By default, Docker uses <strong>runc</strong> as its default container runtime.
+<strong>runc</strong> is the de facto implementation of the <strong>OCI runtime-spec</strong> and expects to start containers from OCI-compliant bundles.
+<strong>containerd</strong> talks to <strong>runc</strong> and ensures Docker ../assets/images/article_post are presented to <strong>runc</strong> as OCI-compliant bundles.
+in fact it forks a new instance of <strong>runc</strong> for every container it creates. However, once each container is created, the parent <strong>runc</strong> process exits.
+This means we can run hundreds of containers without having to run hundreds of runc instances.</p>
+
+<p>Once a container’s parent runc process exits, the associated <strong>containerd-shim</strong> process becomes the container’s parent
+<strong>runc</strong> can be used as a standalone CLI tool to create containers. It’s based on code from <strong>libcontainer</strong>, and can also be used by other projects and third-party tools.
+There is still a lot of functionality implemented in the Docker daemon.
+More of this may be broken out over time. Functionality currently still inside of the Docker daemon includes, but is not limited to; the Docker API, image management, authentication, security features and core networking.
+On a Linux system, the components we’ve discussed are implemented as separate binaries as follows:
+dockerd (the Docker daemon)
+docker-containerd (containerd)
+docker-containerd-shim (shim)
+docker-runc (runc)</p>
+
+<p><img src="../assets/images/article_post/docker_arch.png" alt="docker arch" /></p>
+
+<p>how it works</p>
+
+<p><img src="../assets/images/article_post/docker_arch2.png" alt="docker arch 2" /></p>
+
+<p><strong><a href="#"><code class="language-plaintext highlighter-rouge">^        back to top        ^</code></a></strong></p>
+<h3 id="docker-image">docker image</h3>
+<p>A Docker image is a unit of packaging that contains everything required for an application to run. This includes; application code, application dependencies, and OS constructs.</p>
+
+<p>The manifest list (image index) is a list of architectures supported by a particular image tag. Each supported architecture then has its own manifest detailing the layers that make it up.</p>
+
+<p><img src="../assets/images/article_post/image_manifest.png" alt="image manifest" /></p>
+
+<p><strong><a href="#"><code class="language-plaintext highlighter-rouge">^        back to top        ^</code></a></strong></p>
+<h3 id="namespaces-used-by-docker">namespaces used by docker</h3>
+<p>Through the use of namespaces and cgroups. Linux kernel has several types of namespaces:</p>
+
+<p><strong>Process ID namespaces</strong>: these namespaces include independent set of process IDs<br />
+<strong>Mount namespaces:</strong> Isolation and control of mountpoints<br />
+<strong>Network namespaces:</strong> Isolates system networking resources such as routing table, interfaces, ARP table, etc.<br />
+<strong>UTS namespaces:</strong> Isolate host and domains<br />
+<strong>IPC namespaces:</strong> Isolates interprocess communications<br />
+<strong>User namespaces:</strong> Isolate user and group IDs<br />
+<strong>Time namespaces:</strong> Isolates time machine\</p>
+
+<p><strong><a href="#"><code class="language-plaintext highlighter-rouge">^        back to top        ^</code></a></strong></p>
+<h3 id="docker-network-driver-summary">docker Network driver summary</h3>
+<p><strong>User-defined bridge</strong> networks are best when you need multiple containers to communicate on the same Docker host.(managed by docker network cmd)</p>
+
+<p><strong>Host networks are best</strong> when the network stack should not be isolated from the Docker host, but you want other aspects of the container to be isolated.</p>
+
+<p><strong>Overlay networks</strong> are best when you need containers running on different Docker hosts to communicate, or when multiple applications work together using swarm services.</p>
+
+<p><strong>Macvlan networks</strong> are best when you are migrating from a VM setup or need your containers to look like physical hosts on your network, each with a unique MAC address.</p>
+
+<p><strong>Third-party network</strong> plugins allow you to integrate Docker with specialized network stacks.</p>
+
+<p><strong><a href="#"><code class="language-plaintext highlighter-rouge">^        back to top        ^</code></a></strong></p>
+<h3 id="what-happens-when-you-type-in-browser-wwwamazoncom">what happens when you type in browser www.amazon.com</h3>
+<p>The browser tries to figure out the IP address for the entered domain. The DNS lookup proceeds as follows:</p>
+
+<p>the browser checks its cache, If the browser cache does not contains the desired record, the browser makes a system call to the os which in its turn check its cache, if not found,the request continue to the router, which typically has its own DNS cache,if ip is not found, the request continue to internet service provider (ISP), which in its turn checks its cache, if the IP adresse is not found at any of those cache layers, the dns recursive resolver asks the root name server, the root name server reply with the IP of the top level domain which in its turn reply with the IP of the domain’s name server and then the respanse is giving back to the browser
+when the IP address of the domain name is found the browser needs to establish a TCP connection with the server
+so if https is used, a tls handshake will take place.</p>
+
+<ul>
+  <li>The client computer sends a ClientHello message to the server with its TLS version, list of cipher algorithms and compression methods available.</li>
+  <li>The server replies with a ServerHello message to the client with the TLS version, selected cipher, selected compression methods and the server’s public certificate signed by a CA (Certificate Authority). The certificate contains a public key that will be used by the client to encrypt the rest of the handshake until a symmetric key can be agreed upon.</li>
+  <li>The client verifies the server certificate against its list of trusted CAs.and if it is valid, the client generates a string of pseudo-random bytes and encrypts this with the server’s public key. These random bytes can be used to determine the symmetric key.</li>
+  <li>The server decrypts the random bytes using its private key and uses these bytes to generate its own copy of the symmetric master key.</li>
+  <li>The client sends a Finished message to the server, encrypting a hash of the transmission up to this point with the symmetric key.</li>
+  <li>The server generates its own hash, and then decrypts the client-sent hash to verify that it matches. If it does, it sends its own Finished message to the client, also encrypted with the symmetric key.
+From now on the TLS session transmits the application (HTTP) data encrypted with the agreed symmetric key.</li>
+</ul>
+
+<p><img src="../assets/images/article_post/how%20dns%20works.svg" alt="howdnswork" />
+<img src="../assets/images/article_post/howtlsworks.png" alt="howtlsworks" /></p>
+
+<p><strong><a href="#"><code class="language-plaintext highlighter-rouge">^        back to top        ^</code></a></strong></p>
+<h3 id="techniques-to-scale-a-relational-database">techniques to scale a relational database</h3>
+<ul>
+  <li>
+    <p>Master-slave replication</p>
+
+    <p>The master serves reads and writes, replicating writes to one or more slaves, which serve only reads. Slaves can also replicate to additional slaves in a tree-like fashion. If the master goes offline, the system can continue to operate in read-only mode until a slave is promoted to a master or a new master is provisioned.
+<img src="../assets/images/article_post/master-slave.png" alt="master-slave-replication" /></p>
+  </li>
+  <li>
+    <p>Master-master replication</p>
+
+    <p>Both masters serve reads and writes and coordinate with each other on writes. If either master goes down, the system can continue to operate with both reads and writes.
+<img src="../assets/images/article_post/master-master.png" alt="master-master-replication" /></p>
+  </li>
+  <li>
+    <p>Federation or functional partitioning
+ splits up databases by function. For example, instead of a single, monolithic database, you could have three databases: forums, users, and products, resulting in less read and write traffic to each database and therefore less replication lag. Smaller databases result in more data that can fit in memory, which in turn results in more cache hits due to improved cache locality. With no single central master serializing writes you can write in parallel, increasing throughput.
+ <img src="../assets/images/article_post/federation.png" alt="federation" /></p>
+  </li>
+  <li>
+    <p>Sharding
+ Sharding distributes data across different databases such that each database can only manage a subset of the data. Taking a users database as an example, as the number of users increases, more shards are added to the cluster.Similar to the advantages of federation, sharding results in less read and write traffic, less replication, and more cache hits.
+ <img src="../assets/images/article_post/sharding.png" alt="sharding" /></p>
+  </li>
+  <li>
+    <p>Denormalization
+Denormalization attempts to improve read performance at the expense of some write performance. Redundant copies of the data are written in multiple tables to avoid expensive joins.(like index)</p>
+  </li>
+</ul>
+
+<h3 id="how-nat-works">how nat works</h3>
+<p><strong>Nat</strong> : It’s a way to map multiple local private addresses to a public one before transferring the information.</p>
+
+<p><strong><a href="#"><code class="language-plaintext highlighter-rouge">^        back to top        ^</code></a></strong></p>
+<h3 id="what-is-a-service-how-can-i-check-the-logs-of-a-service-where-are-they-located-how-can-i-check-the-status-of-a-service-how-can-i-start-a-service">What is a service? How can I check the logs of a service? where are they located? How can I check the status of a service? How can I start a service?**</h3>
+
+<ul>
+  <li>a service is a software that runs in the background , started when the server runs, systemd is a service manager,</li>
+  <li>you can check the service logs by <code class="language-plaintext highlighter-rouge">journalctl -u service-name.service (journalctl -u sshd.service)</code></li>
+  <li>they are located in <code class="language-plaintext highlighter-rouge">/var/log</code></li>
+  <li><code class="language-plaintext highlighter-rouge">systemctl status service-name.service , systemctl start service-name.service</code></li>
+</ul>
+
+<p><strong><a href="#"><code class="language-plaintext highlighter-rouge">^        back to top        ^</code></a></strong></p>
+<h3 id="paging-and-swapping">Paging and swapping</h3>
+
+<p>To swap a process means to move that entire process out of main memory and to the swap area on hard disk, whereby <strong>all pages of that process</strong> are moved at the same time.</p>
+
+<p>Paging was introduced as a solution to the inefficiency of swapping entire processes in and out of memory at once. With paging, when the kernel requires more main memory for an active process, <strong>only the least recently used pages</strong> of processes are moved to the swap space.</p>
+
+<p>In Linux there is no swapping just paging, but people are still calling it swapping</p>
+
+<p><strong>the working sets</strong> of a process are the most recently pages used in memory of that process in a given time</p>
+
+<p>https://www.redhat.com/sysadmin/troubleshooting-slow-servers</p>
+
+<p><strong><a href="#"><code class="language-plaintext highlighter-rouge">^        back to top        ^</code></a></strong></p>
+<h3 id="what-do-you-do-if-a-customer-says-their-server-is-using-too-much-ram">what do you do if a customer says their server is using too much RAM**</h3>
+
+<p><em>I’ll check if is really taking too much RAM or just they missunderstand the metrics, as in Linux the available memory to applications is not only the total memory minus the used memory, but instead the total memory - used one + buffred/cached, because the OS uses disk caching to improve the system respanse,</em></p>
+
+<p><em>so if any application needs memory the disk cache can be given back immediately. 
+but if the available memory which is the free + buffred/Cached one is close to 0, and the swap space is increasing, and maybe the oom killer is killing some process, then yes, we need to start looking at the root cause.</em>
+more : https://www.linuxatemyram.com/</p>
+
+<p><strong><a href="#"><code class="language-plaintext highlighter-rouge">^        back to top        ^</code></a></strong></p>
+<h3 id="suppose-that-im-a-client-and-i-cannot-connect-to-a-remote-server-using-ssh-how-do-you-troubleshoot-this-problem-">Suppose that i’m a client and i cannot connect to a remote server using ssh. How do you troubleshoot this problem ?**</h3>
+<p>the first thing i’ll do is asking the client about the output of the ssh command that he gets, the issue might be related to dns, remote host identification has changed and so on, the output of the ssh command will help me narrow down the issue, if it seems related to the DNS, I’ll ask him to try using the IP adress directly instead of the hostname of the server.</p>
+
+<p><strong>“Connection timed out”</strong>
+the server didn’t respond
+The security group or network ACL doesn’t allow access.
+There is a firewall on the instance’s operating system.
+There is a firewall between the client and the server.
+The host doesn’t exist. (maybe a dns issue)</p>
+
+<p><strong>“Connection refused”:</strong>** 
+this comes from the server
+The host reached the instance but there was no service listening on the SSH port (ss -tl to check for listening port)
+A firewall blocked and was set to reject the package instead of dropping it (iptables -F to delete all rules in the firewall on ubuntu).</p>
+
+<p><strong>“Permission denied” or “Authentication failed</strong>
+You’re trying to connect using the wrong user name for your AMI.
+The file permissions within the operating system are incorrect on the instance.
+The incorrect SSH public key (.pub) file is in the authorized_keys file.</p>
+
+<p>more : https://aws.amazon.com/premiumsupport/knowledge-center/ec2-linux-ssh-troubleshooting/</p>
+
+<p><strong><a href="#"><code class="language-plaintext highlighter-rouge">^        back to top        ^</code></a></strong></p>
+<h3 id="slow-system-performance-reasons-and-troubleshooting-toolssteps">Slow system performance: reasons and troubleshooting tools/steps**</h3>
+
+<p><strong>uptime t</strong>o have an idea about the load average</p>
+
+<table>
+  <tbody>
+    <tr>
+      <td>**dmesg</td>
+      <td>tail** to see kernel logs maybe the oom killer started to kill some process or tcp is dropping requests</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>vmstat 1</strong> to see key metrics, cpu memory disk i/o swap and so on, maybe the cpu is saturated r &gt; number of cpus</p>
+
+<p><strong>mpstat -P ALL 1</strong> to check CPU time breakdowns per CPU, maybe there is imabalance, or the application is single threaded</p>
+
+<p><strong>pidstat 1 to</strong> see how much each process is taking</p>
+
+<p><strong>iostat -xz 1</strong> to check the disk I/O, usualy I look at the <strong>await</strong> colomn to see how much time on average a request tooks and spent waiting in the queue, and I’ll check also the average queue lenght <strong>aqu-sz &gt; 1 =&gt; saturation</strong></p>
+
+<p><strong>free -m to see if the system has enough available memory</strong></p>
+
+<p><strong>sar -n DEV 1</strong></p>
+
+<p><strong>sar -n TCP,ETCP 1</strong></p>
+
+<p><strong>top</strong></p>
+
+<p>you can use <strong>sar -1</strong> to see yestrday’s system metrics</p>
+
+<p><strong>sar (system activity report)</strong></p>
+
+<p>more : https://netflixtechblog.com/linux-performance-analysis-in-60-000-milliseconds-accc10403c55 https://netflixtechblog.com/linux-performance-analysis-in-60-000-milliseconds-accc10403c55</p>
+
+<p><strong><a href="#"><code class="language-plaintext highlighter-rouge">^        back to top        ^</code></a></strong></p>
+<h3 id="latency-vs-throughput">latency vs throughput</h3>
+<p><strong>network throughput</strong> refers to how much data can be transferred from source to destination within a given timeframe</p>
+
+<p><strong>Latency</strong> is the amount of time it takes for a packet to make it from source to destination</p>
+
+<p><strong><a href="#"><code class="language-plaintext highlighter-rouge">^        back to top        ^</code></a></strong></p>
+<h3 id="how-can-we-check-if-there-is-an-open-connection-to-a-remote-host">How can we check if there is an open connection to a remote host?</h3>
+<p>using ss -t and cheking the established connection in the state column</p>
+
+<p><strong><a href="#"><code class="language-plaintext highlighter-rouge">^        back to top        ^</code></a></strong></p>
+<h3 id="how-checj-if-a-port-is-openclosed-on-a-remote-server">how checj if a port is open/closed on a remote server</h3>
+<p>using nmap serverIP</p>
+
+<p><strong><a href="#"><code class="language-plaintext highlighter-rouge">^        back to top        ^</code></a></strong></p>
+<h3 id="3-way-handshake">3-way handshake</h3>
+<p>First, the source send an SYN “initial request” packet to the target server in order to start the dialogue. Then the target server then sends a SYN-ACK packet to agree to the process. Lastly, the source sends an ACK packet to the target to confirm the process, after which the message contents can be sent
+<img src="../assets/images/article_post/tcp-handshake-diagram.webp" alt="tcp_handshake" /></p>
+
+<p><strong><a href="#"><code class="language-plaintext highlighter-rouge">^        back to top        ^</code></a></strong></p>
+<h3 id="how-does-tcp-terminate-a-session">How does TCP terminate a session</h3>
+<p><img src="../assets/images/article_post/tcptermination.png" alt="tcptermination" /></p>
+
+<p><strong><a href="#"><code class="language-plaintext highlighter-rouge">^        back to top        ^</code></a></strong></p>
+<h3 id="symmetric-and-asymmetric-encryption">symmetric and asymmetric encryption</h3>
+
+<p>Symmetric encryption uses a single key (secret key) that needs to be shared among the recipients to be able to encrypt and decrypt messages (AES : Advanced Encryption standards 256), while asymmetric encryption uses a pair of public key and a private key to encrypt and decrypt messages (RSA)
+asymetric encryption is relatively slow compared to symmetric encryption, but more secure as the private key is not shared</p>
+
+<p><strong><a href="#"><code class="language-plaintext highlighter-rouge">^        back to top        ^</code></a></strong></p>
+<h3 id="lvm">LVM</h3>
+<p>LVM provides an alternative that you can use when you’re partitioning the hard disk drives in your Linux system.
+Basically, what it does is create an alternative to the traditional process of creating disk partitions and mounting them in the Linux file system instead of defining and creating partitions.<br />
+Instead what you do is define <strong>volume groups</strong> from all the various storage devices in your system.
+Then from the volume group we allocate space to specific <strong>Logical Volumes</strong> which are managed by the <strong>Logical Volume Manager (LVM)</strong>.
+Then instead of mounting a partition in the file system and what you do is instead mount Logical Volumes at the various mount points in your file system.</p>
+
+<p><img src="../assets/images/article_post/LVM.jpg" alt="LVM" /></p>
+
+<p>more info : https://edumotivation.com/what-is-lvm-logical-volume-manager/</p>
+
+<p><strong><a href="#"><code class="language-plaintext highlighter-rouge">^        back to top        ^</code></a></strong></p>]]></content><author><name>Hamza aziz</name></author><summary type="html"><![CDATA[where does the browser save the cache what are inodes hard link vs softlink OSI model deployments startegies CDN what is a container docker image namespaces used by docker docker Network driver summary what happens when you type in browser www.amazon.com techniques to scale a relational database how nat works What is a service? How can I check the logs of a service? where are they located? How can I check the status of a service? How can I start a service?** Paging and swapping what do you do if a customer says their server is using too much RAM** Suppose that i’m a client and i cannot connect to a remote server using ssh. How do you troubleshoot this problem ?** Slow system performance: reasons and troubleshooting tools/steps** latency vs throughput How can we check if there is an open connection to a remote host? how checj if a port is open/closed on a remote server 3-way handshake How does TCP terminate a session symmetric and asymmetric encryption LVM]]></summary></entry></feed>
