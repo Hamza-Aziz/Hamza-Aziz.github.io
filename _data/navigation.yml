@@ -4,9 +4,7 @@ main:
     url: /index.html
   - title: "About"
     url: /about/
-  - title: "Portfolio"
-    url: /portfolio/
   - title: "Achievements"
     url: /achievements/
   - title: "Archive"
-    url: /year-archive/
+    url: /categories/

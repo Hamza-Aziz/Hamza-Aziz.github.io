@@ -6,6 +6,11 @@ share: false
 classes: wide
 author_profile: true
 newsletter: true
+header:
+    overlay_image: /assets/images/article_post/nature.jpg
+    caption: "Photo by Elizeu Dias on Unsplash"
+    overlay_filter: 0.15
+
 ---
 Salam 😄,
 
