@@ -1,7 +1,10 @@
 ---
-title:  "understand Terraform import with IAM users and groups"
-date:   2022-11-29 19:49:42 +0100
-categories: Terraform
+title:  "Understand Terraform import with AWS IAM users and groups"
+date:   2022-11-27 19:49:42 +0100
+categories: 
+  - Terraform
+  - AWS
+
 share: true
 comments: true
 classes: wide
@@ -13,7 +16,7 @@ output:
 
 
 
-# How to import a resource created manually under Terraform management
+### How to import a resource created manually under Terraform management
 
 To avoid configuration drift, Terraform has importing capabilities for most of the AWS resources. By importing a resource, Terraform stores in its state file the setup of the resource,
 
@@ -23,7 +26,7 @@ One important thing to notice is that `terraform import` imports the resources i
 
 **Usage:**
 
-`terraform import [options] ADDRESS ID`
+`terraform import [options] ADDRESS ID` where :
 
 `ID`
 
@@ -31,7 +34,7 @@ is dependent on the resource type being imported. (you can find the id on the la
 
 `ADDRESS`
 
-valid [resource address](https://www.terraform.io/cli/state/resource-addressing)
+is a valid [resource address](https://www.terraform.io/cli/state/resource-addressing)
 
 **Example importing Iam users created manually by the console under Terraform management**
 
@@ -47,9 +50,9 @@ resource "aws_iam_user" "existing_iam_user" {
 
 and then Import it by running the following command
 
-```
-terraform import aws_iam_user.existing_iam_user bob
-```
+
+`terraform import aws_iam_user.existing_iam_user bob`
+
 
 **Importing a group**
 
@@ -65,8 +68,6 @@ resource "aws_iam_group" "this" {
 
 and then Import it by running the following command
 
-```
-terraform import aws_iam_group.this developers
-```
+`terraform import aws_iam_group.this developers`
 
 you can do the same for every Terraform resource.
