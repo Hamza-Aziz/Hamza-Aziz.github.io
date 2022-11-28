@@ -1,7 +1,7 @@
 ---
-title:  "understand Terraform import"
+title:  "understand Terraform import with IAM users and groups"
 date:   2022-11-29 19:49:42 +0100
-categories: Terraform, AWS
+categories: Terraform
 share: true
 comments: true
 classes: wide
