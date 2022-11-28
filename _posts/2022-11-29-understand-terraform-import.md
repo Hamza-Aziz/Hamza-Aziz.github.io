@@ -69,4 +69,4 @@ and then Import it by running the following command
 terraform import aws_iam_group.this developers
 ```
 
-you can do the same for every Terraform resource
+you can do the same for every Terraform resource.
