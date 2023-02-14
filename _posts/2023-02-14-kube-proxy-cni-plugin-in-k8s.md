@@ -12,7 +12,7 @@ output:
     html_document:
         fig_caption: yes
 ---
-
+Before discussing the difference between the two components, let's take a second to define the CNI,
 ### What is the CNI ?
 CNI (Container Network Interface),is a Cloud Native Computing Foundation project, consists of a specification and libraries for writing plugins to configure network interfaces in Linux containers, it concerns itself only with network connectivity of containers and removing allocated resources when the container is deleted.
 
