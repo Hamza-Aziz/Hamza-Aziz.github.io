@@ -14,6 +14,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Set permissions for workspace
+        run: |
+          sudo chown -R $USER:$USER $GITHUB_WORKSPACE
+          sudo chmod -R 777 $GITHUB_WORKSPACE
+
       - name: Clone repository
         uses: actions/checkout@v2
 
