@@ -16,8 +16,7 @@ jobs:
     steps:
       - name: Set permissions for workspace
         run: |
-          sudo chown -R $USER:$USER $GITHUB_WORKSPACE
-          sudo chmod -R 777 $GITHUB_WORKSPACE
+          git config --global --add safe.directory /github/workspace
 
       - name: Clone repository
         uses: actions/checkout@v2
