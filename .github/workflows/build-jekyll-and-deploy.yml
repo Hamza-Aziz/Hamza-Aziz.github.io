@@ -11,13 +11,12 @@ on:
 jobs:
   deploy:
     name: github-pages
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
 
     steps:
       - name: Set permissions for workspace
         run: |
-          git config --global --add safe.directory /github/workspace
-          ls -l $GITHUB_WORKSPACE
+          git config --global safe.directory '*'
 
       - name: Clone repository
         uses: actions/checkout@v2
