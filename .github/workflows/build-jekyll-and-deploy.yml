@@ -14,9 +14,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Set permissions for workspace
+      - name: Set Owner for workspace
         run: |
-          git config --global safe.directory '*'
+          chown -R $(id -u):$(id -g) $PWD
 
       - name: Clone repository
         uses: actions/checkout@v2
