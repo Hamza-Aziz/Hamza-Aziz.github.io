@@ -32,4 +32,3 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           target_branch: 'gh-pages'
-          commit_author: github-actions[bot]
