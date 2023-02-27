@@ -12,7 +12,7 @@ output:
     html_document:
         fig_caption: yes
 ---
-
+![3-env]({{site.url}}/assets/images/article_post/env-tst-stag-prod.png)\
 As your infrastructure grows, managing multiple environments (such as development, staging, and production) can become challenging. In this blog post, we'll explore three popular approaches in Terraform open source version to managing multiple environments: Terraform workspace, folder structure, and Terragrunt.
 
 **Terraform Workspace**
@@ -52,7 +52,7 @@ For example, you could have the following folder structure:
 ```
 Using a folder structure provides a clear separation between environments, making it easier to manage changes and apply them to specific environments. However,as the size of the infrastructure grows, having to maintain all of this duplicated code between environments becomes more error prone as all environments will likely contain the same code with a different sizing.
 
-If you want to have a look at a real world example using folder structure approach see https://github.com/antonbabenko/terraform-best-practices/tree/master/examples
+If you want to have a look at a real world example using folder structure approach see [terraform-best-practices](https://github.com/antonbabenko/terraform-best-practices/tree/master/examples) examples.
 
 **Terragrunt**
 
@@ -64,7 +64,7 @@ One of the key features of Terragrunt is its ability to automatically generate T
 
 Terragrunt also provides features like automatic state locking and remote state management, simplifying the management of Terraform state files across multiple environments.
 
-Real world example using Terragrunt : https://github.com/gruntwork-io/terragrunt-infrastructure-live-example
+Real world example using Terragrunt : [terragrunt-infrastructure-live-example] (https://github.com/gruntwork-io/terragrunt-infrastructure-live-example)
 
 Using Terragrunt may require some learning, but it is definitely worth it.
 
