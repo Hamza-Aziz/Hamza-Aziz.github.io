@@ -1,6 +1,6 @@
 ---
 title:  "Hardlink vs Softlink"
-date:   2023-02-27 18:20:00 +0100
+date:   2023-02-26 18:20:00 +0100
 categories: 
   - Linux
 
