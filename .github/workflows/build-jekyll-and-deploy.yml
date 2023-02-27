@@ -14,12 +14,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Set Owner for workspace
-        run: |
-          chown -R $(id -u):$(id -g) $PWD
-
       - name: Clone repository
         uses: actions/checkout@v2
+        with:
+          set-safe-directory: '*'
 
       - name: Caching for Bundler
         uses: actions/cache@v2
@@ -30,7 +28,7 @@ jobs:
             ${{ runner.os }}-gems-
 
       - name: Build and deploy
-        uses: helaili/jekyll-action@v2
+        uses: Hamza-Aziz/jekyll-action@v2
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           target_branch: 'gh-pages'
