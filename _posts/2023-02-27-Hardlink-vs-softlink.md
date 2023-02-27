@@ -13,7 +13,7 @@ output:
         fig_caption: yes
 ---
 
-In this article, we'll talk about the difference between soft links and hard links, they might sounds simple and easy (in fact they are) but many engineers still don't know the main difference and use cases of both types,
+In this article, we'll talk about the difference between soft links and hard links, they might sounds simple and easy (in fact they are) but many engineers still don't know the main difference between the two types,
 
 To understand **softlink** and **hardlink**, we need to understand first *Inode* in Linux 🔑:
 
@@ -30,7 +30,7 @@ The inode numbers and their corresponding *inodes* are held in inode tables, whi
 now let's discuss our main topic 🧐:
 **hard link vs softlink**
 
-<u>*hard link*</u>
+<u>hard link</u>
  
 Two files are hardlinked, when both filename can reference the same *inode number* and thus the same content.\
 ![hardlink]({{site.url}}/assets/images/article_post/hardlink.png)\
@@ -38,7 +38,7 @@ Two files are hardlinked, when both filename can reference the same *inode numbe
 To create a hardlink for the *basic.file* file :\
 `ln basic.file hardlink.file`\
 
-<u>*Soft link* </u>
+<u>Soft link </u>
 
 The data part of this file carries a path to another file : \
 ![softlink]({{site.url}}/assets/images/article_post/softlink.png)\
