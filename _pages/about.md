@@ -12,7 +12,7 @@ header:
     overlay_filter: 0.15
 
 ---
-                            Resourceful team player. Passionate and self-driven.
+                        Resourceful team player. Passionate and self-driven.
 
 ## Work Experience 👨‍💻
 
