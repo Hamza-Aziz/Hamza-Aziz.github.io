@@ -16,7 +16,8 @@ header:
 
 ## Work Experience 👨‍💻
 
-### DevOps Engineer SQLI Dortmund, Germany (remotely) <time> Aug 2021 – Present </time>
+### DevOps Engineer SQLI Dortmund, Germany (remotely) 
+📅 <time> Aug 2021 – Present </time>
 
 - Maintaining constant 99.99% uptime for SAP commerce applications within both Azure and AWS (more than 40 servers).
 - Introduced the use of Terraform for resource management. Created extensive modules for EC2 autoscaling, RDS resources, ALB,CloudWatch Alarms, VPC, and ECS resources.
@@ -29,28 +30,28 @@ header:
 - I created a self-service platform for developers using the Serverless Framework and GitHub Actions which allows developers to deploy their own lambdas with defined configurations and auxiliary resources, resulting in multiple daily deployments.
 - I regularly advocate for the team to produce and maintain documentation. Furthermore, I have taken the initiative to produce visual diagrams and flowcharts for all of our applications and processes using Draw.io and Confluence.
 
-### DevOps Engineer (Internship) SQLI Rabat, Morocco <time> Feb 2021 – Aug 2021 </time>
+### DevOps Engineer (Internship) SQLI Rabat, Morocco 
+📅 <time> Feb 2021 – Aug 2021 </time>
 
 
 - Accelerated build and deployment time for Java applications to AWS by implementing a Jenkins CICD pipeline.
 - Wrote dynamic and reusable Terraform modules and Ansible playbooks to be used by the rest of the team.
 - Increased visibility across all cloud resources by integrating Datadog with Terraform for metrics monitoring and logs.
 
-### Mobile Application Developer (Internship) Progiciel system Casablanca <time> Aug 2020 – Sep 2020 </time>
+### Mobile Application Developer (Internship) Progiciel system Casablanca 
+📅 <time> Aug 2020 – Sep 2020 </time>
 
 
 - I was part of a 2-month internship where I developed a cross-platform mobile application using:
 React Native, NPM, Redux, expressJS JWT, Axios and MySQL.
 
-<!-- ## LICENSES & CERTIFICATIONS 🎓
+## EDUCATION 🏫
+### Software Engineering Degree <time>
+📅 SEP 2017 - SEP 2021 </time>
+- National School of Applied Sciences (ENSA) - SAFI 
 
 
-- AWS Certified Solutions Architect – Associate ☁️
-- HashiCorp Certified: Terraform Associate #️⃣
-- Datadog Partner Network Technical Specialist :dog2: -->
-
-
-### Free time :
+## Free time :
  - Surfing 🏄 
  - Billiard 🎱
  - Giving back to the community on [Stackoverflow](https://stackoverflow.com/users/10735209/hamza) and open source collaborators 🤝
