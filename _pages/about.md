@@ -46,8 +46,8 @@ header:
 React Native, NPM, Redux, expressJS JWT, Axios and MySQL.
 
 ## EDUCATION 🏫
-### Software Engineering Degree <time>
-📅 SEP 2017 - SEP 2021 </time>
+### Software Engineering Degree 
+📅 <time> SEP 2017 - SEP 2021 </time>
 - National School of Applied Sciences (ENSA) - SAFI 
 
 
