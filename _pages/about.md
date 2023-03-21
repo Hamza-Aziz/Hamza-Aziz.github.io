@@ -54,7 +54,7 @@ React Native, NPM, Redux, expressJS JWT, Axios and MySQL.
 ## Free time :
  - Surfing 🏄 
  - Billiard 🎱
- - Giving back to the community on [Stackoverflow](https://stackoverflow.com/users/10735209/hamza) and open source collaborators 🤝
+ - Giving back to the community on [Stackoverflow](https://stackoverflow.com/users/10735209/hamza) and open source collaboration 🤝
 
   
 [![Hamza Aziz StackOverflow](https://github-readme-stackoverflow.vercel.app/?userID=10735209)](https://stackoverflow.com/users/10735209/hamza)
