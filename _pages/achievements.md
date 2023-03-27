@@ -18,5 +18,4 @@ header:
 
 <div data-iframe-width="150" data-iframe-height="270" data-share-badge-id="a7e16378-4775-4cc4-a19d-b0ebbf8772f7" data-share-badge-host="https://www.credly.com"></div><script type="text/javascript" async src="//cdn.credly.com/assets/utilities/embed.js"></script>
 
-<div data-iframe-width="150" data-iframe-height="270" data-share-badge-id="Datadog Partner Network
-Technical Specialist" data-share-badge-host="https://www.credly.com"></div><script type="text/javascript" async src="//cdn.credly.com/assets/utilities/embed.js"></script>
+<div data-iframe-width="150" data-iframe-height="270" data-share-badge-id="79c5014c-c7af-49f0-8c6e-9273c1e2aa6a" data-share-badge-host="https://www.credly.com"></div><script type="text/javascript" async src="//cdn.credly.com/assets/utilities/embed.js"></script>
