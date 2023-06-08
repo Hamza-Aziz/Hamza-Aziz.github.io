@@ -25,7 +25,7 @@ title                    : "Hamza aziz"
 title_separator          : "-"
 subtitle                 : # site tagline that appears below site title in masthead
 name                     : "Hamza aziz"
-description              : "my daily tasks as a devops engineer"
+description              : "DevOps blogs : Just a way to give back to the community and to my self"
 url                      : "https://hamza-aziz.github.io"
 baseurl                  : # the subpath of your site, e.g. "/blog"
 teaser                   : # path of fallback teaser image, e.g. "/assets/images/500x300.png"
