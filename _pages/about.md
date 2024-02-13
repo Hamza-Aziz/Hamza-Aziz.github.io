@@ -18,7 +18,10 @@ header:
 
 ### DevOps Engineer SQLI Dortmund, Germany (remotely) 
 📅 <time> Aug 2021 – Present </time>
-
+- Creation and administration of 5 on-premises Pre-prod and prod Kubernetes clusters, with the implementing a GitOps strategy using Flux CD.
+- Actively implementing robust and secure CI/CD pipelines using Woodpecker (forked Drone CI).
+- Setup and maintenance of comprehensive monitoring solutions, Prometheus, Loki, Promtail, OpenTelemetry, Tempo, and Grafana. 
+- Containerization and packaging of applications using Docker and Helm.
 - Maintaining constant 99.99% uptime for SAP commerce applications within both Azure and AWS (more than 40 servers).
 - Introduced the use of Terraform for resource management. Created extensive modules for EC2 autoscaling, RDS resources, ALB,CloudWatch Alarms, VPC, and ECS resources.
 - Took ownership of increasing visibility across all cloud resources by integrating Datadog with Terraform for metrics monitoring and logs. This initiative increased response time to issues within our cloud environments and helped us reduce tech debt by enabling us to identify the root cause of several alert conditions.
