@@ -12,14 +12,14 @@ header:
     overlay_filter: 0.15
 
 ---
-                        Resourceful team player. Passionate and self-driven.
+                        Experienced DevOps Engineer with 3+ Years in K8s, AWS and Azure.
 
 ## Work Experience 👨‍💻
 
 ### DevOps Engineer SQLI Dortmund, Germany (remotely) 
 📅 <time> Aug 2021 – Present </time>
-- Creation and administration of 5 on-premises Pre-prod and prod Kubernetes clusters, with the implementing a GitOps strategy using Flux CD.
-- Actively implementing robust and secure CI/CD pipelines using Woodpecker (forked Drone CI).
+- I have created and currently administer five on-premises pre-production and production Kubernetes clusters. Additionally, I implemented a GitOps strategy using Flux CD.
+- Orchestrated the development and implementation of CI/CD pipelines using Github Actions, resulting in a 40% reduction in deployment time and a 25% increase in deployment frequency.
 - Setup and maintenance of comprehensive monitoring solutions, Prometheus, Loki, Promtail, OpenTelemetry, Tempo, and Grafana. 
 - Containerization and packaging of applications using Docker and Helm.
 - Maintaining constant 99.99% uptime for SAP commerce applications within both Azure and AWS (more than 40 servers).
