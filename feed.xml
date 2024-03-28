@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://hamza-aziz.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://hamza-aziz.github.io/" rel="alternate" type="text/html" /><updated>2024-03-28T14:59:37+00:00</updated><id>https://hamza-aziz.github.io/feed.xml</id><title type="html">Hamza aziz</title><subtitle>DevOps blogs : Just a way to give back to the community and to my self</subtitle><author><name>Hamza aziz</name></author><entry><title type="html">Storage and Workload Separation in Kubernetes with Longhorn</title><link href="https://hamza-aziz.github.io/k8s/longhorn/k3s/Storage-and-Workload-Separation-in-Kubernetes-with-longhorn/" rel="alternate" type="text/html" title="Storage and Workload Separation in Kubernetes with Longhorn" /><published>2024-03-28T13:39:00+00:00</published><updated>2024-03-28T13:39:00+00:00</updated><id>https://hamza-aziz.github.io/k8s/longhorn/k3s/Storage-and-Workload-Separation-in-Kubernetes-with-longhorn</id><content type="html" xml:base="https://hamza-aziz.github.io/k8s/longhorn/k3s/Storage-and-Workload-Separation-in-Kubernetes-with-longhorn/"><![CDATA[<h1 id="context">Context</h1>
+<p>Let’s say you have a k8s or a k3s cluster composed of 6 worker nodes, and for some reasons, you want to separate compute from storage in a way that some worker nodes run only <code class="language-plaintext highlighter-rouge">Longhorn</code> pods and take care of storage (volumes, replicas), while the rest of the worker nodes run any other pods and use the volumes that are on the other worker nodes.</p>
+
+<p>For example, you want the worker nodes <code class="language-plaintext highlighter-rouge">node-1</code> and <code class="language-plaintext highlighter-rouge">node-2</code> to run only <code class="language-plaintext highlighter-rouge">Longhorn</code> pods and create volumes that are ready to be consumed, and the worker nodes <code class="language-plaintext highlighter-rouge">node-3</code>, <code class="language-plaintext highlighter-rouge">node-4</code>, <code class="language-plaintext highlighter-rouge">node-5</code>, <code class="language-plaintext highlighter-rouge">node-6</code> have no volumes on their disks, only workload pods, and consume the volumes from the worker nodes <code class="language-plaintext highlighter-rouge">node-1</code> and <code class="language-plaintext highlighter-rouge">node-2</code>. How do you do that?</p>
+
+<h2 id="how">How</h2>
+<p>You can make this on an existing <code class="language-plaintext highlighter-rouge">Longhorn</code> or on a newly installed one.</p>
+
+<p>Let’s start:</p>
+
+<p>We call the worker nodes <code class="language-plaintext highlighter-rouge">node-1</code> and <code class="language-plaintext highlighter-rouge">node-2</code>, the storage nodes and the worker nodes <code class="language-plaintext highlighter-rouge">node-3</code>, <code class="language-plaintext highlighter-rouge">node-4</code>, <code class="language-plaintext highlighter-rouge">node-5</code>, <code class="language-plaintext highlighter-rouge">node-6</code> the compute nodes.</p>
+
+<h3 id="configure-the-storage-nodes">Configure the storage nodes</h3>
+
+<ol>
+  <li>
+    <p>Label the storage nodes with the label <code class="language-plaintext highlighter-rouge">node.longhorn.io/create-default-disk=true</code>.</p>
+
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> kubectl label nodes node-1 node-2 node.longhorn.io/create-default-disk=true
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Install <code class="language-plaintext highlighter-rouge">Longhorn</code> with the setting “Create Default Disk on Labeled Nodes” set to true.</p>
+
+    <p>if you’re using Helm to install <code class="language-plaintext highlighter-rouge">longhron</code> you can set that value using :</p>
+
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> defaultSettings:
+   # -- Setting that allows Longhorn to automatically create a default disk only on nodes with the label "node.longhorn.io/create-default-disk=true" (if no other disks exist). When this setting is disabled, Longhorn creates a default disk on each node that is added to the cluster.
+   createDefaultDiskLabeledNodes: true
+</code></pre></div>    </div>
+
+    <p>If you’re using another method, have a look at how to configure this setting, see <a href="https://longhorn.io/docs/archives/1.2.2/references/settings/#create-default-disk-on-labeled-nodes">https://longhorn.io/docs/archives/1.2.2/references/settings/#create-default-disk-on-labeled-nodes</a></p>
+  </li>
+</ol>
+
+<p>Now, if you go to the <code class="language-plaintext highlighter-rouge">Longhorn</code> dashboard, you’ll see that the compute nodes are disabled and have no disk.</p>
+
+<p>📝📌 PS: If you’ve already installed <code class="language-plaintext highlighter-rouge">Longhorn</code> and want to configure this setting on a working <code class="language-plaintext highlighter-rouge">Longhorn</code>, you need to remove the compute nodes from the cluster and bring them back again to have this take effect.</p>
+
+<h3 id="rejecting-no-longhron-pods-from-being-scheduled-on-the-storage-nodes">Rejecting no Longhron pods from being scheduled on the storage nodes</h3>
+
+<p>The current changes we made will only tell <code class="language-plaintext highlighter-rouge">Longhorn</code> to stop using the compute nodes for storage but will not restrict all the pods except <code class="language-plaintext highlighter-rouge">Longhorn</code>’s pods from being scheduled on the storage nodes. Taint and toleration to the rescue!</p>
+
+<p><code class="language-plaintext highlighter-rouge">Longhorn</code> components can be configured to tolerate taints. So, the idea is to taint the storage nodes and make only the <code class="language-plaintext highlighter-rouge">Longhorn</code> pods tolerate these taints. This will result in allowing only the <code class="language-plaintext highlighter-rouge">Longhorn</code> pods to be scheduled on the storage nodes and rejecting any other pod.</p>
+
+<ol>
+  <li>
+    <p>Apply the taint on the storage nodes</p>
+
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> kubectl taint nodes node-1 node-2 node=storage:NoSchedule
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Make the Longhorn pods tolerate the taint</p>
+
+    <p>Just to not make this article long, depending on whether you installed <code class="language-plaintext highlighter-rouge">Longhorn</code> or are planning to install it and with which method, steps differ. So, follow up on the blog depending on your case. Link <a href="https://longhorn.io/docs/archives/1.2.2/advanced-resources/deploy/taint-toleration/#setting-up-taints-and-tolerations-after-longhorn-has-been-installed">https://longhorn.io/docs/archives/1.2.2/advanced-resources/deploy/taint-toleration/#setting-up-taints-and-tolerations-after-longhorn-has-been-installed</a>.</p>
+  </li>
+</ol>
+
+<p><strong>Tips</strong>: If you’re trying this on an installed <code class="language-plaintext highlighter-rouge">Longhorn</code>, one of the steps in the link I provided is asking to make all volumes detached. An easy way is to run this command for every namespace you have:</p>
+
+<ul>
+  <li>
+    <p>This will scale down all deployments to 0 in the namespace my-namespace.</p>
+
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>kubectl scale deployment -n my-namespace --replicas=0 --all
+</code></pre></div>    </div>
+  </li>
+  <li>This will scale down all stateful sets to 0 in the namespace my-namespace.
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>kubectl scale statefulset -n my-namespace --replicas=0 --all
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>When the setting is configured, you can bring them back by (if the replica count was 1 ofc):</p>
+
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>kubectl scale deployment -n my-namespace --replicas=1 --all
+</code></pre></div>    </div>
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>kubectl scale statefulset -n my-namespace --replicas=1 --all
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<p>Now, you have node 1 and node 2 responsible only for storing volumes and replicas and nothing else, and nodes 3, 4, and 5 responsible only for your workload pods.</p>]]></content><author><name>Hamza aziz</name></author><category term="k8s" /><category term="longhorn" /><category term="k3s" /><summary type="html"><![CDATA[Context Let’s say you have a k8s or a k3s cluster composed of 6 worker nodes, and for some reasons, you want to separate compute from storage in a way that some worker nodes run only Longhorn pods and take care of storage (volumes, replicas), while the rest of the worker nodes run any other pods and use the volumes that are on the other worker nodes.]]></summary></entry><entry><title type="html">Hardlink vs Softlink</title><link href="https://hamza-aziz.github.io/linux/Hardlink-vs-softlink/" rel="alternate" type="text/html" title="Hardlink vs Softlink" /><published>2023-02-26T17:20:00+00:00</published><updated>2023-02-26T17:20:00+00:00</updated><id>https://hamza-aziz.github.io/linux/Hardlink-vs-softlink</id><content type="html" xml:base="https://hamza-aziz.github.io/linux/Hardlink-vs-softlink/"><![CDATA[<p>In this article, we’ll talk about the difference between soft links and hard links, they might sounds simple and easy (in fact they are) but many engineers still don’t know the main difference between the two types,</p>
+
+<p>To understand <strong>softlink</strong> and <strong>hardlink</strong>, we need to understand first <em>Inode</em> in Linux 🔑:</p>
+
+<p><strong>Inodes</strong></p>
+
+<p><em>Inodes</em> are a data structure to store metadata about a file/directory,</p>
+
+<p>in simple words, Whenever a user or a program refers to a file by name, the operating system uses that name to look up the corresponding <em>inode</em> from the Inode table, which then enables the system to obtain the information it needs about the file to perform further operations.</p>
+
+<p>with that said, a file name in a Unix-like operating system is simply an entry in a table with inode numbers, rather than being associated directly with a file (in contrast to other operating systems such as the Microsoft Windows systems).</p>
+
+<p>The inode numbers and their corresponding <em>inodes</em> are held in inode tables, which are stored in strategic locations in a filesystem,</p>
+
+<p>now let’s discuss our main topic 🧐:
+<strong>hard link vs softlink</strong></p>
+
+<p><u>hard link</u></p>
+
+<p>Two files are hardlinked, when both filename can reference the same <em>inode number</em> and thus the same content.<br />
+<img src="https://hamza-aziz.github.io/assets/images/article_post/hardlink.png" alt="hardlink" />\</p>
+
+<p>To create a hardlink for the <em>basic.file</em> file :<br />
+<code class="language-plaintext highlighter-rouge">ln basic.file hardlink.file</code>\</p>
+
+<p><u>Soft link </u></p>
+
+<p>The data part of this file carries a path to another file : <br />
+<img src="https://hamza-aziz.github.io/assets/images/article_post/softlink.png" alt="softlink" />\</p>
+
+<p>To create a softlink for the <em>softlink.file</em> file : <br />
+<code class="language-plaintext highlighter-rouge">ln -s basic.file softlink.file</code></p>
+
+<p>Hope this helps ✅</p>]]></content><author><name>Hamza aziz</name></author><category term="Linux" /><summary type="html"><![CDATA[In this article, we’ll talk about the difference between soft links and hard links, they might sounds simple and easy (in fact they are) but many engineers still don’t know the main difference between the two types,]]></summary></entry><entry><title type="html">Managing Multiple Environments using Terraform Workspace vs Folders vs Terragrunt</title><link href="https://hamza-aziz.github.io/terraform/Terraform-workspace-terragrunt/" rel="alternate" type="text/html" title="Managing Multiple Environments using Terraform Workspace vs Folders vs Terragrunt" /><published>2023-02-23T16:20:00+00:00</published><updated>2023-02-23T16:20:00+00:00</updated><id>https://hamza-aziz.github.io/terraform/Terraform-workspace-terragrunt</id><content type="html" xml:base="https://hamza-aziz.github.io/terraform/Terraform-workspace-terragrunt/"><![CDATA[<p><img src="https://hamza-aziz.github.io/assets/images/article_post/env-tst-stag-prod.png" alt="3-env" /><br />
+As your infrastructure grows, managing multiple environments (such as development, staging, and production) can become challenging. In this blog post, we’ll explore three popular approaches in Terraform open source version to managing multiple environments: Terraform workspace, folder structure, and Terragrunt.</p>
+
+<p><strong>Terraform Workspace</strong></p>
+
+<p>Terraform workspace is a built-in feature of Terraform that allows you to manage multiple environments within a single Terraform configuration. Workspaces enable you to create separate state files for each environment, keeping the configuration separate and distinct. This means that you can make changes to one environment without affecting the others.</p>
+
+<p>To create a workspace, you can use the terraform workspace new command. For example, if you want to create a workspace for the development environment, you can run:</p>
+
+<p><code class="language-plaintext highlighter-rouge">terraform workspace new dev</code></p>
+
+<p>This creates a new workspace called dev. You can then switch to this workspace using the terraform workspace select command:</p>
+
+<p><code class="language-plaintext highlighter-rouge">terraform workspace select dev</code></p>
+
+<p>Once you have switched to the workspace, any changes you make to your Terraform configuration will be applied to that workspace’s state file.</p>
+
+<p>Using Terraform workspace simplifies the management of multiple environments as it allows you to use a single Terraform configuration file for all environments. However, it can become complex if you have many workspaces with many resources.</p>
+
+<p><strong>Folder Structure</strong>
+Another way to manage multiple environments is to use a folder structure. This involves organizing your Terraform configuration files into separate folders, one for each environment. Each folder contains a complete set of Terraform configuration files for that environment.</p>
+
+<p>For example, you could have the following folder structure:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>.
+├── dev
+│ ├── main.tf
+│ ├── variables.tf
+│ └── ...
+├── staging
+│ ├── main.tf
+│ ├── variables.tf
+│ └── ...
+└── prod
+├── main.tf
+├── variables.tf
+└── ...
+</code></pre></div></div>
+<p>Using a folder structure provides a clear separation between environments, making it easier to manage changes and apply them to specific environments. However,as the size of the infrastructure grows, having to maintain all of this duplicated code between environments becomes more error prone as all environments will likely contain the same code with a different sizing.</p>
+
+<p>If you want to have a look at a real world example using folder structure approach see <a href="https://github.com/antonbabenko/terraform-best-practices/tree/master/examples">terraform-best-practices</a> examples.</p>
+
+<p><strong>Terragrunt</strong></p>
+
+<p><a href="https://github.com/gruntwork-io/terragrunt">Terragrunt</a> is a tool that provides extra functionality on top of Terraform. It simplifies infrastructure management by providing a layer of abstraction that enables you to manage multiple Terraform configurations and workspaces in a more streamlined way.</p>
+
+<p>Terragrunt uses a configuration file called terragrunt.hcl to define the Terraform configurations and workspaces that it should manage. This allows you to create a modular, reusable infrastructure codebase that can be easily shared and reused across projects.</p>
+
+<p>One of the key features of Terragrunt is its ability to automatically generate Terraform configuration files based on templates. This allows you to create a single template that can be used across multiple environments, with Terragrunt automatically updating the relevant variables and settings based on the current workspace.</p>
+
+<p>Terragrunt also provides features like automatic state locking and remote state management, simplifying the management of Terraform state files across multiple environments.</p>
+
+<p>Real world example using Terragrunt : [terragrunt-infrastructure-live-example] (https://github.com/gruntwork-io/terragrunt-infrastructure-live-example)</p>
+
+<p>Using Terragrunt may require some learning, but it is definitely worth it.</p>
+
+<p><strong>Conclusion</strong></p>
+
+<p>Managing multiple environments can be challenging, picking up an approach can be difficult but in general the most used on is <em>Folder structure</em> as it easy to manage and don’t require learning a new tool,</p>]]></content><author><name>Hamza aziz</name></author><category term="Terraform" /><summary type="html"><![CDATA[As your infrastructure grows, managing multiple environments (such as development, staging, and production) can become challenging. In this blog post, we’ll explore three popular approaches in Terraform open source version to managing multiple environments: Terraform workspace, folder structure, and Terragrunt.]]></summary></entry><entry><title type="html">Kubernetes CNI plugin vs Kube-proxy</title><link href="https://hamza-aziz.github.io/k8s/kube-proxy-cni-plugin-in-k8s/" rel="alternate" type="text/html" title="Kubernetes CNI plugin vs Kube-proxy" /><published>2023-02-14T16:20:00+00:00</published><updated>2023-02-14T16:20:00+00:00</updated><id>https://hamza-aziz.github.io/k8s/kube-proxy-cni-plugin-in-k8s</id><content type="html" xml:base="https://hamza-aziz.github.io/k8s/kube-proxy-cni-plugin-in-k8s/"><![CDATA[<p>Before discussing the difference between the two components, let’s take a second to define the CNI,</p>
+<h3 id="what-is-the-cni-">What is the CNI ?</h3>
+<p>CNI (Container Network Interface),is a Cloud Native Computing Foundation project, consists of a specification and libraries for writing plugins to configure network interfaces in Linux containers, it concerns itself only with network connectivity of containers and removing allocated resources when the container is deleted.</p>
+
+<p>that way any plugin provider know what should be configured to be supported.</p>
+
+<h3 id="differences-between-kube-proxy-and-cni-plugins">Differences between Kube-proxy and CNI plugins</h3>
+
+<p>CNI (Container Network Interface) and kube-proxy are both important components of the Kubernetes networking stack, but they serve different functions.</p>
+
+<p><strong>The CNI plugin</strong> is responsible for providing network connectivity between containers and pods. It manages the IP addresses assigned to each pod and handles network traffic routing and isolation.</p>
+
+<p>Kubernetes supports a variety of <em>CNI plugins</em>, each with its own set of features and capabilities. The CNI plugin is responsible for setting up the networking infrastructure on each node in the cluster and ensuring that pods can communicate with each other, regardless of where they are running.</p>
+
+<p>An example of famous CNI plugins : <strong>Flannel, Calico, Weave Net</strong>…</p>
+
+<p>On the other hand, <strong>kube-proxy</strong> is a network proxy and load balancer that runs on each node in the cluster. Its primary role is to manage the network connectivity between services and their associated pods. It sets up the necessary networking rules and routes traffic to the appropriate pods.</p>
+
+<p><strong>kube-proxy</strong> provides <em>service discovery</em>, <em>load balancing</em>, and <em>IP masquerading</em> functionality, which makes it a critical component of the Kubernetes networking stack.</p>
+
+<p>In summary, while the <strong>CNI</strong> provides the network connectivity between containers and pods, <strong>kube-proxy</strong> provides the network connectivity between services and pods. Together, these two components form the foundation of the Kubernetes networking stack, enabling the reliable and scalable operation of applications and services running on the platform.</p>
+
+<p>Hope this help.</p>]]></content><author><name>Hamza aziz</name></author><category term="k8s" /><summary type="html"><![CDATA[Before discussing the difference between the two components, let’s take a second to define the CNI, What is the CNI ? CNI (Container Network Interface),is a Cloud Native Computing Foundation project, consists of a specification and libraries for writing plugins to configure network interfaces in Linux containers, it concerns itself only with network connectivity of containers and removing allocated resources when the container is deleted.]]></summary></entry><entry><title type="html">Understand Terraform import with AWS IAM users and groups</title><link href="https://hamza-aziz.github.io/terraform/aws/understand-terraform-import-wiht-aws/" rel="alternate" type="text/html" title="Understand Terraform import with AWS IAM users and groups" /><published>2022-11-27T18:49:42+00:00</published><updated>2022-11-27T18:49:42+00:00</updated><id>https://hamza-aziz.github.io/terraform/aws/understand%20terraform%20import%20wiht%20aws</id><content type="html" xml:base="https://hamza-aziz.github.io/terraform/aws/understand-terraform-import-wiht-aws/"><![CDATA[<h3 id="how-to-import-a-resource-created-manually-under-terraform-management">How to import a resource created manually under Terraform management</h3>
+
+<p>To avoid configuration drift, Terraform has importing capabilities for most of the AWS resources. By importing a resource, Terraform stores in its state file the setup of the resource,</p>
+
+<p>as it’s currently on the cloud. So, when you run <code class="language-plaintext highlighter-rouge">terraform plan</code>, the imported resources are compared with your configuration and the differences are presented.</p>
+
+<p>One important thing to notice is that <code class="language-plaintext highlighter-rouge">terraform import</code> imports the resources in the state file, but doesn’t fill the resource definition on your .tf files. This is a process we have to perform manually,</p>
+
+<p><strong>Usage:</strong></p>
+
+<p><code class="language-plaintext highlighter-rouge">terraform import [options] ADDRESS ID</code> where :</p>
+
+<p><code class="language-plaintext highlighter-rouge">ID</code></p>
+
+<p>is dependent on the resource type being imported. (you can find the id on the last line of every Terraform resource documentation)</p>
+
+<p><code class="language-plaintext highlighter-rouge">ADDRESS</code></p>
+
+<p>is a valid <a href="https://www.terraform.io/cli/state/resource-addressing">resource address</a></p>
+
+<p><strong>Example importing Iam users created manually by the console under Terraform management</strong></p>
+
+<p>suppose that we have an iam user <strong>bob</strong> created by the console, and we need to import it on our IaC code</p>
+
+<p>add the resource block definition on your tf file :</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>resource "aws_iam_user" "existing_iam_user" {
+  name = "bob"
+}
+</code></pre></div></div>
+
+<p>and then Import it by running the following command</p>
+
+<p><code class="language-plaintext highlighter-rouge">terraform import aws_iam_user.existing_iam_user bob</code></p>
+
+<p><strong>Importing a group</strong></p>
+
+<p>add the resource block definition on your tf file :</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>resource "aws_iam_group" "this" {
+
+  name = "developers"
+
+}
+</code></pre></div></div>
+
+<p>and then Import it by running the following command</p>
+
+<p><code class="language-plaintext highlighter-rouge">terraform import aws_iam_group.this developers</code></p>
+
+<p>you can do the same for every Terraform resource.</p>]]></content><author><name>Hamza aziz</name></author><category term="Terraform" /><category term="AWS" /><summary type="html"><![CDATA[How to import a resource created manually under Terraform management]]></summary></entry></feed>
