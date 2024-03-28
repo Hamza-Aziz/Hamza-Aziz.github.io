@@ -1,8 +1,10 @@
 ---
 title:  "Storage and Workload Separation in Kubernetes with Longhorn"
-date:   2023-02-26 18:20:00 +0100
+date:   2024-03-28 14:39:00 +0100
 categories: 
-  - k8s, longhorn, k3s
+  - k8s  
+  - longhorn
+  - k3s
 
 share: true
 comments: true
@@ -15,22 +17,22 @@ output:
 # Context
 Let's say you have a k8s or a k3s cluster composed of 6 worker nodes, and for some reasons, you want to separate compute from storage in a way that some worker nodes run only `Longhorn` pods and take care of storage (volumes, replicas), while the rest of the worker nodes run any other pods and use the volumes that are on the other worker nodes.
 
-For example, you want worker nodes 1 and 2 to run only `Longhorn` pods and create volumes that are ready to be consumed. worker nodes 3, 4, and 5 have no volumes on their disks, only pods, and consume the volumes from worker nodes 1 and 2. How do you do that?
-
+For example, you want the worker nodes `node-1` and `node-2` to run only `Longhorn` pods and create volumes that are ready to be consumed, and the worker nodes `node-3`, `node-4`, `node-5`, `node-6` have no volumes on their disks, only workload pods, and consume the volumes from the worker nodes `node-1` and `node-2`. How do you do that?
 
 ## How
-You can make this on an existing Longhorn or on a newly installed one.
+You can make this on an existing `Longhorn` or on a newly installed one.
 
-Let's start: We call worker nodes 1 and 2, the storage nodes and the worker nodes 3, 4, and 5, the compute nodes.
+Let's start: 
+
+We call the worker nodes `node-1` and `node-2`, the storage nodes and the worker nodes `node-3`, `node-4`, `node-5`, `node-6` the compute nodes.
 
 ### Configure the storage nodes
 
 1. Label the storage nodes with the label `node.longhorn.io/create-default-disk=true`.
 
-  ```
-  kubectl label nodes node-1 node-2 node.longhorn.io/create-default-disk=true
-  ```
-
+    ```
+    kubectl label nodes node-1 node-2 node.longhorn.io/create-default-disk=true
+    ```
 
 2. Install `Longhorn` with the setting "Create Default Disk on Labeled Nodes" set to true. 
 
@@ -42,7 +44,7 @@ Let's start: We call worker nodes 1 and 2, the storage nodes and the worker node
       createDefaultDiskLabeledNodes: true
     ```
 
-    If you're using another method, have a look at how to configure this setting, see https://longhorn.io/docs/archives/1.2.2/references/settings/#create-default-disk-on-labeled-nodes
+    If you're using another method, have a look at how to configure this setting, see [https://longhorn.io/docs/archives/1.2.2/references/settings/#create-default-disk-on-labeled-nodes](https://longhorn.io/docs/archives/1.2.2/references/settings/#create-default-disk-on-labeled-nodes)
 
 
 Now, if you go to the `Longhorn` dashboard, you'll see that the compute nodes are disabled and have no disk.
@@ -61,7 +63,8 @@ The current changes we made will only tell `Longhorn` to stop using the compute 
     kubectl taint nodes node-1 node-2 node=storage:NoSchedule
     ```
 2. Make the Longhorn pods tolerate the taint
-Just to not make this article long, depending on whether you installed `Longhorn` or are planning to install it and with which method, steps differ. So, follow up on the blog depending on your case. Link https://longhorn.io/docs/archives/1.2.2/advanced-resources/deploy/taint-toleration/#setting-up-taints-and-tolerations-after-longhorn-has-been-installed.
+
+    Just to not make this article long, depending on whether you installed `Longhorn` or are planning to install it and with which method, steps differ. So, follow up on the blog depending on your case. Link [https://longhorn.io/docs/archives/1.2.2/advanced-resources/deploy/taint-toleration/#setting-up-taints-and-tolerations-after-longhorn-has-been-installed](https://longhorn.io/docs/archives/1.2.2/advanced-resources/deploy/taint-toleration/#setting-up-taints-and-tolerations-after-longhorn-has-been-installed).
 
 
 **Tips**: If you're trying this on an installed `Longhorn`, one of the steps in the link I provided is asking to make all volumes detached. An easy way is to run this command for every namespace you have:
