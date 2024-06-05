@@ -19,3 +19,6 @@ header:
 
 
 <div data-iframe-width="150" data-iframe-height="270" data-share-badge-id="79c5014c-c7af-49f0-8c6e-9273c1e2aa6a" data-share-badge-host="https://www.credly.com"></div><script type="text/javascript" async src="//cdn.credly.com/assets/utilities/embed.js"></script>
+
+
+<div data-iframe-width="150" data-iframe-height="270" data-share-badge-id="ccfd6286-6022-4f9e-91b5-8fd86de07ae7" data-share-badge-host="https://www.credly.com"></div><script type="text/javascript" async src="//cdn.credly.com/assets/utilities/embed.js"></script>
