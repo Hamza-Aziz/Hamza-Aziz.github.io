@@ -28,7 +28,7 @@ jobs:
             ${{ runner.os }}-gems-
 
       - name: Build and deploy
-        uses: Hamza-Aziz/jekyll-action@v2
+        uses: actions/jekyll-build-pages@v1.0.13
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           target_branch: 'gh-pages'
