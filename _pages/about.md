@@ -12,7 +12,7 @@ header:
     overlay_filter: 0.15
 
 ---
-                    Experienced DevOps Engineer with 3+ Years in K8s, AWS and Azure.
+                    Experienced DevOps Engineer with 5+ Years in K8s, AWS and Azure.
 
 ## Work Experience 👨‍💻
 
